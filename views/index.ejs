@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Hour Leave</title>
+    <style>
+        /* General Reset */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        /* Container Styling */
+        .container {
+            background: #fff;
+            padding: 2rem 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Header Styling */
+        h1 {
+            font-size: 2rem;
+            color: #0984e3;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-input {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: space-between;
+        }
+
+        .time-input input {
+            flex: 1;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            outline: none;
+            background: #f7f9fc;
+        }
+
+        .time-input input:focus {
+            border-color: #0984e3;
+            box-shadow: 0px 4px 10px rgba(9, 132, 227, 0.2);
+        }
+
+        /* Button Styling */
+        button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0984e3, #74b9ff);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0px 5px 15px rgba(9, 132, 227, 0.4);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            box-shadow: 0px 8px 20px rgba(9, 132, 227, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Result Section */
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #dff9fb;
+            border: 2px solid #00cec9;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 206, 201, 0.2);
+        }
+
+        .result p {
+            font-size: 1.2rem;
+            color: #00cec9;
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+
+        /* Error Message */
+        .error {
+            color: #d63031;
+            background: #fab1a0;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 1rem;
+            box-shadow: 0px 4px 10px rgba(214, 48, 49, 0.2);
+        }
+
+        /* Mobile Responsiveness */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            button {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Working Hour Leave Calculator</h1>
+        <form method="POST" action="/">
+            <div class="input-group">
+                <label for="workingHour">Working Time:</label>
+                <div class="time-input">
+                    <input type="number" id="workingHour" name="workingHour" placeholder="Hours.. e.g : 6 " min="0"
+                        required>
+                    <input type="number" id="workingMinute" name="workingMinute" placeholder="Minutes.. e.g : 30"
+                        min="0" max="59" required>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="totalHour">Total Time in Day:</label>
+                <div class="time-input">
+                    <input type="number" id="totalHour" name="totalHour" placeholder="Hours.. e.g : 8" min="0" required>
+                    <input type="number" id="totalMinute" name="totalMinute" placeholder="Minutes.. e.g : 45" min="0"
+                        max="59" required>
+                </div>
+            </div>
+            <button type="submit">Calculate</button>
+        </form>
+        <% if (error) { %>
+            <p class="error">
+                <%= error %>
+            </p>
+            <% } %>
+                <% if (result) { %>
+                    <div class="result">
+                        <p>Leave Time: <strong>
+                                <%= result.leaveHours %> hours and <%= result.leaveMinutes %> minutes
+                            </strong></p>
+                        <p>Leave Percentage: <strong>
+                                <%= result.leavePercentage %>
+                            </strong></p>
+                    </div>
+                    <% } %>
+    </div>
+</body>
+
+</html>
