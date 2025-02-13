@@ -15,13 +15,15 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
     const { workingHour, workingMinute, totalHour, totalMinute } = req.body;
 
-    if (!workingHour || !workingMinute || !totalHour || !totalMinute) {
+    if (!workingHour || !workingMinute) {
         return res.render('index', { error: 'Please fill out all fields', result: null });
     }
 
     // Convert input hours and minutes into total minutes
     const workingTotalMinutes = parseInt(workingHour) * 60 + parseInt(workingMinute);
-    const totalDayMinutes = parseInt(totalHour) * 60 + parseInt(totalMinute);
+    const totalHourInDay = totalHour ? parseInt(totalHour) : 8; // Default to 8 hours
+    const totalMinuteInDay = totalMinute ? parseInt(totalMinute) : 45; // Default to 45 minutes
+    const totalDayMinutes = totalHourInDay * 60 + totalMinuteInDay;
 
     // Perform calculations
     const leaveMinutes = totalDayMinutes - workingTotalMinutes;
